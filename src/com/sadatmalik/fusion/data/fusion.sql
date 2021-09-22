@@ -32,7 +32,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `fusion`.`income` (
   `income_id` INT NOT NULL AUTO_INCREMENT,
-  `income_amount` INT NOT NULL,
+  `income_amount` DECIMAL(10,2) NOT NULL,
   `income_source` VARCHAR(100) NOT NULL,
   `income_weekly_interval` INT NOT NULL COMMENT 'Zero for one off income',
   `timestamp` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -69,7 +69,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `fusion`.`monthly_income` (
   `monthly_income_id` INT NOT NULL AUTO_INCREMENT,
-  `monthly_income_amount` INT NOT NULL,
+  `monthly_income_amount` DECIMAL(10,2) NOT NULL,
   `monthly_income_source` INT NOT NULL,
   `day_of_month_recvd` INT NOT NULL,
   `timestamp` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS `fusion`.`accounts` (
   `account_id` INT NOT NULL AUTO_INCREMENT,
   `bank` VARCHAR(45) NOT NULL,
   `account_type` INT NOT NULL,
-  `balance` INT NOT NULL,
+  `balance` DECIMAL(10,2) NOT NULL,
   `timestamp` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`account_id`),
   INDEX `fk_accounts_account_type_idx` (`account_type` ASC) VISIBLE,
@@ -444,6 +444,52 @@ CREATE TABLE IF NOT EXISTS `fusion`.`goals_accounts` (
     FOREIGN KEY (`account_id`)
     REFERENCES `fusion`.`accounts` (`account_id`)
     ON DELETE RESTRICT
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `fusion`.`income_accounts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `fusion`.`income_accounts` (
+  `income_accounts_id` INT NOT NULL AUTO_INCREMENT,
+  `income_id` INT NOT NULL,
+  `account_id` INT NOT NULL,
+  PRIMARY KEY (`income_accounts_id`),
+  INDEX `fk_income_accounts_income_id_idx` (`income_id` ASC) VISIBLE,
+  INDEX `fk_income_accounts_account_id_idx` (`account_id` ASC) VISIBLE,
+  CONSTRAINT `fk_income_accounts_income_id`
+    FOREIGN KEY (`income_id`)
+    REFERENCES `fusion`.`income` (`income_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_income_accounts_account_id`
+    FOREIGN KEY (`account_id`)
+    REFERENCES `fusion`.`accounts` (`account_id`)
+    ON DELETE NO ACTION
+    ON UPDATE CASCADE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `fusion`.`monthly_income_accounts`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `fusion`.`monthly_income_accounts` (
+  `monthly_income_accounts_id` INT NOT NULL AUTO_INCREMENT,
+  `monthly_income_id` INT NOT NULL,
+  `account_id` INT NOT NULL,
+  PRIMARY KEY (`monthly_income_accounts_id`),
+  INDEX `fk_monthly_income_accounts_monthly_income_id_idx` (`monthly_income_id` ASC) VISIBLE,
+  INDEX `fk_monthly_income_accounts_account_id_idx` (`account_id` ASC) VISIBLE,
+  CONSTRAINT `fk_monthly_income_accounts_monthly_income_id`
+    FOREIGN KEY (`monthly_income_id`)
+    REFERENCES `fusion`.`monthly_income` (`monthly_income_id`)
+    ON DELETE RESTRICT
+    ON UPDATE CASCADE,
+  CONSTRAINT `fk_monthly_income_accounts_account_id`
+    FOREIGN KEY (`account_id`)
+    REFERENCES `fusion`.`accounts` (`account_id`)
+    ON DELETE NO ACTION
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
