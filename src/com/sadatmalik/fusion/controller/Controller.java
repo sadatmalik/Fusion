@@ -20,8 +20,8 @@ public class Controller {
 
         for (User user : fusion.users) {
             double income = Lookup.totalMonthlyIncomeFor(user);
-            System.out.println("Total monthly income for " + user.getFirstName() + " " +
-                    user.getLastName() + ": " + income);
+            System.out.printf("Total monthly income for %s %s: £%,.2f \n", user.getFirstName(),
+                    user.getLastName(), income);
 
         }
     }
