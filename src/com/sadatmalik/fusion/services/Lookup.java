@@ -1,6 +1,7 @@
 package com.sadatmalik.fusion.services;
 
 import com.sadatmalik.fusion.data.JDBCAdapter;
+import com.sadatmalik.fusion.model.Account;
 import com.sadatmalik.fusion.model.User;
 
 import java.util.ArrayList;
@@ -20,6 +21,10 @@ public class Lookup {
 
     public static ArrayList<User> getUsers() {
         return db.getUsers();
+    }
+
+    public static ArrayList<Account> accountsFor(User user) {
+        return db.getAccountsFor(user.getUserId());
     }
 
     public static void close() {

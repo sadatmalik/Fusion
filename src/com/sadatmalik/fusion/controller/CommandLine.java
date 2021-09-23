@@ -1,5 +1,7 @@
 package com.sadatmalik.fusion.controller;
 
+import com.sadatmalik.fusion.model.Account;
+import com.sadatmalik.fusion.model.AccountType;
 import com.sadatmalik.fusion.model.User;
 
 import java.util.ArrayList;
@@ -59,6 +61,22 @@ public class CommandLine {
 
         // return selected main menu item
         return MainMenuItem.getMenuItemById(selection);
+    }
+
+    public void displayQuickStats(User user) {
+        System.out.println();
+        if (user.getAccounts() != null) {
+            displayAccountBalances(user.getAccountsByType(AccountType.CURRENT));
+            displayAccountBalances(user.getAccountsByType(AccountType.SAVINGS));
+            displayAccountBalances(user.getAccountsByType(AccountType.CASH));
+        }
+    }
+
+    private void displayAccountBalances(ArrayList<Account> accounts) {
+        for (Account account : accounts) {
+            System.out.println("Your " + account.getName().toUpperCase() + " " +
+                    account.getType() + " account balance is: " + account.getBalance());
+        }
     }
 
     public void close() {

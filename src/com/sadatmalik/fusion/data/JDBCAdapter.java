@@ -1,5 +1,7 @@
 package com.sadatmalik.fusion.data;
 
+import com.sadatmalik.fusion.model.Account;
+import com.sadatmalik.fusion.model.AccountType;
 import com.sadatmalik.fusion.model.User;
 
 import java.sql.*;
@@ -45,20 +47,6 @@ public class JDBCAdapter {
             System.out.println("Exception while closing DB connection");
             exception.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        JDBCAdapter adapter = new JDBCAdapter();
-    }
-
-    public PreparedStatement getPreparedStatement(String sql) {
-        PreparedStatement ps = null;
-        try {
-            ps = connection.prepareStatement(sql);
-        } catch (SQLException exception) {
-            System.out.println("Unable to prepare statement for SQL: " + sql);
-        }
-        return ps;
     }
 
     public double getTotalMonthlyIncomeFor(int userId) {
@@ -132,5 +120,53 @@ public class JDBCAdapter {
 
         return users;
     }
+
+    public ArrayList<Account> getAccountsFor(int userId) {
+        String sql = "SELECT a.* , a_t.description\n" +
+                "FROM accounts a\n" +
+                "JOIN account_types a_t\n" +
+                "ON a.account_type = a_t.account_types_id\n" +
+                "JOIN users_accounts ua\n" +
+                "ON a.account_id = ua.account_id\n" +
+                "JOIN users u\n" +
+                "ON ua.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?;\n";
+
+        ArrayList<Account> accounts = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            accounts = parseAccounts(rs);
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException exception) {
+            System.out.println("Unable to get users from " + DATABASE);
+        }
+
+        return accounts;
+    }
+
+    private ArrayList<Account> parseAccounts(ResultSet rs) throws SQLException {
+        ArrayList<Account> accounts = new ArrayList<>();
+
+        while(rs.next()) {
+            int id = rs.getInt(1);
+            String name = rs.getString(2);
+            int typeId = rs.getInt(3);
+            double balance = rs.getDouble(4);
+
+            Account account = new Account(id, name, AccountType.from(typeId), balance);
+
+            accounts.add(account);
+        }
+
+        return accounts;
+    }
+
 
 }

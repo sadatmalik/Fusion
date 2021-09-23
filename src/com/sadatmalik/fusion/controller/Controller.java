@@ -1,5 +1,6 @@
 package com.sadatmalik.fusion.controller;
 
+import com.sadatmalik.fusion.model.Account;
 import com.sadatmalik.fusion.model.User;
 import com.sadatmalik.fusion.services.Lookup;
 import com.sun.tools.javac.Main;
@@ -29,8 +30,10 @@ public class Controller {
         // Select the user for this session
         fusion.selectUser();
 
+        // enter the main application loop
         fusion.mainLoop();
 
+        // exit the application closing any resources
         fusion.exit();
     }
 
@@ -78,8 +81,21 @@ public class Controller {
     private void quickStats() {
         // get stats
 
+        // account balances
+        ArrayList<Account> accounts = Lookup.accountsFor(activeUser);
+        activeUser.setAccounts(accounts);
+
+        // debts
+
+        // income
+
+        // expenses
+
+
         // display stats
+        cli.displayQuickStats(activeUser);
     }
+
 
     private void exit() {
         System.out.println("\nGoodbye!");

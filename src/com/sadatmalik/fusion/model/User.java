@@ -1,6 +1,8 @@
 package com.sadatmalik.fusion.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class User {
 
@@ -8,6 +10,9 @@ public class User {
     private String lastName;
     private String email;
     private int userId;
+
+    private ArrayList<Account> accounts;
+    private Map<AccountType, ArrayList<Account>> accountByType;
 
     public User(String firstName, String lastName, String email, int userId) {
         this.firstName = firstName;
@@ -30,6 +35,34 @@ public class User {
 
     public int getUserId() {
         return userId;
+    }
+
+    public ArrayList<Account> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(ArrayList<Account> accounts) {
+        this.accounts = accounts;
+
+        // lazy initialise accounts map
+        if (accountByType == null) {
+            accountByType = new HashMap<>();
+        }
+
+        // add accounts by account type
+        for (Account account : accounts) {
+            if (accountByType.get(account.getType()) == null) {
+                ArrayList<Account> accountList = new ArrayList<>();
+                accountList.add(account);
+                accountByType.put(account.getType(), accountList);
+            } else {
+                accountByType.get(account.getType()).add(account);
+            }
+        }
+    }
+
+    public ArrayList<Account> getAccountsByType(AccountType accountType) {
+        return accountByType.get(accountType);
     }
 
     @Override
