@@ -1,6 +1,9 @@
 package com.sadatmalik.fusion.controller;
 
-public enum MainMenu {
+import java.util.HashMap;
+import java.util.Map;
+
+public enum MainMenuItem {
 
     QUICK_STATS(1, "View Quick Stats"),
     ADD_EDIT_INCOME_EXPENSES(2, "Add/Edit Income & Expenses"),
@@ -11,7 +14,16 @@ public enum MainMenu {
     private final int itemNumber;
     private final String menuText;
 
-    MainMenu(int itemNumber, String menuText) {
+    private static final Map<Integer, MainMenuItem> menuItemById;
+
+    static {
+        menuItemById = new HashMap<>();
+        for (MainMenuItem menuItem : MainMenuItem.values()) {
+            menuItemById.put(menuItem.itemNumber, menuItem);
+        }
+    }
+
+    MainMenuItem(int itemNumber, String menuText) {
         this.itemNumber = itemNumber;
         this.menuText = menuText;
     }
@@ -22,5 +34,9 @@ public enum MainMenu {
 
     public String getMenuText() {
         return menuText;
+    }
+
+    public static MainMenuItem getMenuItemById(int id) {
+        return menuItemById.get(id);
     }
 }

@@ -22,4 +22,8 @@ public class Lookup {
         return db.getUsers();
     }
 
+    public static void close() {
+        db.close();
+    }
+
 }
