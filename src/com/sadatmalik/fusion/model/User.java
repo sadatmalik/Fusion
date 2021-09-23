@@ -14,6 +14,8 @@ public class User {
     private ArrayList<Account> accounts;
     private Map<AccountType, ArrayList<Account>> accountByType;
 
+    private ArrayList<Debt> debts;
+
     public User(String firstName, String lastName, String email, int userId) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -63,6 +65,14 @@ public class User {
 
     public ArrayList<Account> getAccountsByType(AccountType accountType) {
         return accountByType.get(accountType);
+    }
+
+    public void setDebts(ArrayList<Debt> debts) {
+        this.debts = debts;
+    }
+
+    public ArrayList<Debt> getDebts() {
+        return debts;
     }
 
     @Override

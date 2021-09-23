@@ -1,9 +1,9 @@
 package com.sadatmalik.fusion.controller;
 
 import com.sadatmalik.fusion.model.Account;
+import com.sadatmalik.fusion.model.Debt;
 import com.sadatmalik.fusion.model.User;
 import com.sadatmalik.fusion.services.Lookup;
-import com.sun.tools.javac.Main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -86,6 +86,8 @@ public class Controller {
         activeUser.setAccounts(accounts);
 
         // debts
+        ArrayList<Debt> debts = Lookup.debtsFor(activeUser);
+        activeUser.setDebts(debts);
 
         // income
 

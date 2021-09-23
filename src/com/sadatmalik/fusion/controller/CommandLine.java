@@ -2,6 +2,7 @@ package com.sadatmalik.fusion.controller;
 
 import com.sadatmalik.fusion.model.Account;
 import com.sadatmalik.fusion.model.AccountType;
+import com.sadatmalik.fusion.model.Debt;
 import com.sadatmalik.fusion.model.User;
 
 import java.util.ArrayList;
@@ -70,12 +71,24 @@ public class CommandLine {
             displayAccountBalances(user.getAccountsByType(AccountType.SAVINGS));
             displayAccountBalances(user.getAccountsByType(AccountType.CASH));
         }
+
+        System.out.println();
+        if (user.getDebts() != null) {
+            displayDebts(user.getDebts());
+        }
     }
 
     private void displayAccountBalances(ArrayList<Account> accounts) {
         for (Account account : accounts) {
             System.out.println("Your " + account.getName().toUpperCase() + " " +
                     account.getType() + " account balance is: " + account.getBalance());
+        }
+    }
+
+    private void displayDebts(ArrayList<Debt> debts) {
+        for (Debt debt : debts) {
+            System.out.println("Your " + debt.getLender().toUpperCase() + " debt is: "
+                    + debt.getTotalOwed());
         }
     }
 

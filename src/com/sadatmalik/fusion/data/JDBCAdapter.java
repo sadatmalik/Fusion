@@ -2,6 +2,7 @@ package com.sadatmalik.fusion.data;
 
 import com.sadatmalik.fusion.model.Account;
 import com.sadatmalik.fusion.model.AccountType;
+import com.sadatmalik.fusion.model.Debt;
 import com.sadatmalik.fusion.model.User;
 
 import java.sql.*;
@@ -145,7 +146,7 @@ public class JDBCAdapter {
             ps.close();
 
         } catch (SQLException exception) {
-            System.out.println("Unable to get users from " + DATABASE);
+            System.out.println("Unable to get accounts for user " + userId + " from " + DATABASE);
         }
 
         return accounts;
@@ -166,6 +167,58 @@ public class JDBCAdapter {
         }
 
         return accounts;
+    }
+
+    public ArrayList<Debt> getDebtsFor(int userId) {
+        String sql = "SELECT d.*, (d.total_borrowed * d.interest_rate / 100 / 12) AS monthly\n" +
+                "FROM debt d\n" +
+                "JOIN users_debt ud\n" +
+                "ON d.debt_id = ud.debt_id\n" +
+                "JOIN users u\n" +
+                "ON ud.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?;";
+
+        ArrayList<Debt> debts = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            debts = parseDebts(rs);
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException exception) {
+            System.out.println("Unable to get debts for user " + userId + " from " + DATABASE);
+        }
+
+        return debts;
+    }
+
+    private ArrayList<Debt> parseDebts(ResultSet rs) throws SQLException {
+        ArrayList<Debt> debts = new ArrayList<>();
+
+        while(rs.next()) {
+            int id = rs.getInt(1);
+            String lender = rs.getString(2);
+            double totalOwed = rs.getDouble(3);
+            double totalBorrowed = rs.getDouble(4);
+            int dayOfMonthPaid = rs.getInt(5);
+            double interestRate = rs.getDouble(6);
+            Timestamp dateBorrowed = rs.getTimestamp(7);
+            int initialTerm = rs.getInt(8);
+            double monthly = rs.getDouble(10);
+
+            Debt debt = new Debt(id, lender, totalOwed, totalBorrowed,
+                    dayOfMonthPaid, interestRate, new Date(dateBorrowed.getTime()),
+                    initialTerm, monthly);
+
+            debts.add(debt);
+        }
+
+        return debts;
     }
 
 
