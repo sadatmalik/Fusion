@@ -24,6 +24,24 @@ JOIN users u
 ON umi.user_id = u.user_id
 WHERE u.user_id = 2;
 
+# Get monthly income for user
+SELECT mi.*
+FROM monthly_income mi
+JOIN users_monthly_income umi
+ON mi.monthly_income_id = umi.monthly_income_id
+JOIN users u
+ON umi.user_id = u.user_id
+WHERE u.user_id = 2;
+
+# Get weekly income for user
+SELECT wi.*
+FROM income wi
+JOIN users_income uwi
+ON wi.income_id = uwi.income_id
+JOIN users u
+ON uwi.user_id = u.user_id
+WHERE u.user_id = 1;
+
 # Get users
 SELECT * FROM users;
 
