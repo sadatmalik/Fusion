@@ -54,6 +54,14 @@ public class Debt {
         return initialTerm;
     }
 
+    public Date getDateBorrowed() {
+        return dateBorrowed;
+    }
+
+    public double getMonthly() {
+        return monthly;
+    }
+
     @Override
     public String toString() {
         return "Debt{" +

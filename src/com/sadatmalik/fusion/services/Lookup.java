@@ -1,10 +1,7 @@
 package com.sadatmalik.fusion.services;
 
 import com.sadatmalik.fusion.data.JDBCAdapter;
-import com.sadatmalik.fusion.model.Account;
-import com.sadatmalik.fusion.model.Debt;
-import com.sadatmalik.fusion.model.Income;
-import com.sadatmalik.fusion.model.User;
+import com.sadatmalik.fusion.model.*;
 
 import java.util.ArrayList;
 
@@ -37,6 +34,9 @@ public class Lookup {
         return db.getIncomesFor(user.getUserId());
     }
 
+    public static ArrayList<Expense> expensesFor(User user) {
+        return db.getExpensesFor(user.getUserId());
+    }
 
     public static void close() {
         db.close();

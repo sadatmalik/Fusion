@@ -11,4 +11,22 @@ public class WeeklyExpense extends Expense {
         this.timesPerWeek = timesPerWeek;
         this.weeklyInterval = weeklyInterval;
     }
+
+    public int getTimesPerWeek() {
+        return timesPerWeek;
+    }
+
+    public int getWeeklyInterval() {
+        return weeklyInterval;
+    }
+
+    @Override
+    public String toString() {
+        return "WeeklyExpense{" +
+                "name='" + name + '\'' +
+                ", amount=" + amount +
+                ", timesPerWeek=" + timesPerWeek +
+                ", weeklyInterval=" + weeklyInterval +
+                '}';
+    }
 }

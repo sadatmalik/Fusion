@@ -1,9 +1,7 @@
 package com.sadatmalik.fusion.controller;
 
-import com.sadatmalik.fusion.model.Account;
-import com.sadatmalik.fusion.model.Debt;
-import com.sadatmalik.fusion.model.Income;
-import com.sadatmalik.fusion.model.User;
+import com.sadatmalik.fusion.model.*;
+import com.sadatmalik.fusion.services.Analyzer;
 import com.sadatmalik.fusion.services.Lookup;
 
 import java.util.ArrayList;
@@ -18,9 +16,10 @@ public class Controller {
 
     public Controller() {
         users = Lookup.getUsers();
-        System.out.println("Loaded users from DB: " + Arrays.toString(users.toArray()));
+        System.out.println("Controller(): Loaded users from DB: " + Arrays.toString(users.toArray()));
 
         cli = new CommandLine();
+        System.out.println("Controller(): Initialised command line");
     }
 
     public static void main(String[] args) {
@@ -95,10 +94,13 @@ public class Controller {
         activeUser.setIncomes(incomes);
 
         // expenses
-
+        ArrayList<Expense> expenses = Lookup.expensesFor(activeUser);
+        activeUser.setExpenses(expenses);
 
         // display stats
         cli.displayQuickStats(activeUser);
+        String incomeDebtRatio = Analyzer.getIncomeDebtRatioFor(activeUser);
+        cli.displayIncomeDebtRatio(incomeDebtRatio);
     }
 
 

@@ -92,6 +92,10 @@ public class CommandLine {
         }
     }
 
+    public void displayIncomeDebtRatio(String incomeDebtRatio) {
+        System.out.println("\nYour income to debt ratio is currently " + incomeDebtRatio + " to 1 ");
+    }
+
     public void close() {
         commandLine.close();
     }

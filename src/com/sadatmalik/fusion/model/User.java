@@ -1,5 +1,6 @@
 package com.sadatmalik.fusion.model;
 
+import java.lang.reflect.Executable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ public class User {
 
     private ArrayList<Debt> debts;
     private ArrayList<Income> incomes;
+    private ArrayList<Expense> expenses;
 
     public User(String firstName, String lastName, String email, int userId) {
         this.firstName = firstName;
@@ -84,6 +86,14 @@ public class User {
         this.incomes = incomes;
     }
 
+    public ArrayList<Expense> getExpenses() {
+        return expenses;
+    }
+
+    public void setExpenses(ArrayList<Expense> expenses) {
+        this.expenses = expenses;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -95,6 +105,7 @@ public class User {
                 ", accountByType=" + accountByType +
                 ", debts=" + debts +
                 ", incomes=" + incomes +
+                ", expenses=" + expenses +
                 '}';
     }
 }

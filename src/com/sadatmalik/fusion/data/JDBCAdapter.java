@@ -314,5 +314,98 @@ public class JDBCAdapter {
         return incomes;
     }
 
+    public ArrayList<Expense> getExpensesFor(int userId) {
+        ArrayList<Expense> expenses = getMonthlyExpensesFor(userId);
+        expenses.addAll(getWeeklyExpensesFor(userId));
+        return expenses;
+    }
+
+    private ArrayList<Expense> getMonthlyExpensesFor(int userId) {
+        String sql = "SELECT mex.*\n" +
+                "FROM monthly_expenses mex\n" +
+                "JOIN users_monthly_expenses umex\n" +
+                "ON mex.monthly_expense_id = umex.monthly_expense_id\n" +
+                "JOIN users u\n" +
+                "ON umex.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?;";
+
+        ArrayList<Expense> expenses = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            expenses = parseMonthlyExpenses(rs);
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException exception) {
+            System.out.println("Unable to get monthly expenses for user " + userId + " from " + DATABASE);
+        }
+
+        return expenses;
+    }
+
+    private ArrayList<Expense> parseMonthlyExpenses(ResultSet rs) throws SQLException {
+        ArrayList<Expense> expenses = new ArrayList<>();
+
+        while(rs.next()) {
+            String name = rs.getString(2);
+            double amount = rs.getDouble(3);
+
+            Expense expense = new MonthlyExpense(name, amount);
+
+            expenses.add(expense);
+        }
+
+        return expenses;
+    }
+
+    private ArrayList<Expense> getWeeklyExpensesFor(int userId) {
+        String sql = "SELECT wex.*\n" +
+                "FROM weekly_expenses wex\n" +
+                "JOIN users_weekly_expenses uwex\n" +
+                "ON wex.weekly_expense_id = uwex.weekly_expense_id\n" +
+                "JOIN users u\n" +
+                "ON uwex.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?;";
+
+        ArrayList<Expense> expenses = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            expenses = parseWeeklyExpenses(rs);
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException exception) {
+            System.out.println("Unable to get weekly expenses for user " + userId + " from " + DATABASE);
+        }
+
+        return expenses;
+    }
+
+    private ArrayList<Expense> parseWeeklyExpenses(ResultSet rs) throws SQLException {
+        ArrayList<Expense> expenses = new ArrayList<>();
+
+        while(rs.next()) {
+            String name = rs.getString(2);
+            double amount = rs.getDouble(3);
+            int timesPerWeek = rs.getInt(4);
+            int weeklyInterval = rs.getInt(5);
+
+            Expense expense = new WeeklyExpense(name, amount, timesPerWeek, weeklyInterval);
+
+            expenses.add(expense);
+        }
+
+        return expenses;
+    }
 
 }
