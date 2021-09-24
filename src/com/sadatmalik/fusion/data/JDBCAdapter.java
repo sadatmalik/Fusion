@@ -207,10 +207,18 @@ public class JDBCAdapter {
             Timestamp dateBorrowed = rs.getTimestamp(7);
             int initialTerm = rs.getInt(8);
             double monthly = rs.getDouble(10);
-
-            Debt debt = new Debt(id, lender, totalOwed, totalBorrowed,
-                    dayOfMonthPaid, interestRate, new Date(dateBorrowed.getTime()),
-                    initialTerm, monthly);
+            
+            Debt debt = new Debt.Builder()
+                    .id(id)
+                    .lender(lender)
+                    .totalOwed(totalOwed)
+                    .totalBorrowed(totalBorrowed)
+                    .dayOfMonthPaid(dayOfMonthPaid)
+                    .interestRate(interestRate)
+                    .dateBorrowed(new Date(dateBorrowed.getTime()))
+                    .initialTerm(initialTerm)
+                    .monthly(monthly)
+                    .build();
 
             debts.add(debt);
         }
