@@ -1,4 +1,4 @@
-package com.sadatmalik.fusion.controller;
+package com.sadatmalik.fusion.controllers;
 
 import java.util.HashMap;
 import java.util.Map;

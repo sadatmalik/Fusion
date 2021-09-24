@@ -1,4 +1,4 @@
-package com.sadatmalik.fusion.controller;
+package com.sadatmalik.fusion.controllers;
 
 import com.sadatmalik.fusion.model.*;
 import com.sadatmalik.fusion.services.Analyzer;
@@ -25,7 +25,7 @@ public class Controller {
     public static void main(String[] args) {
         Controller fusion = new Controller();
 
-        System.out.println("Welcome to Fusion. Please select from users below:");
+        System.out.println("\nWelcome to Fusion. Please select from users below:");
 
         // Select the user for this session
         fusion.selectUser();

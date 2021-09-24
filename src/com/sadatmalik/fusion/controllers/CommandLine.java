@@ -1,4 +1,4 @@
-package com.sadatmalik.fusion.controller;
+package com.sadatmalik.fusion.controllers;
 
 import com.sadatmalik.fusion.model.Account;
 import com.sadatmalik.fusion.model.AccountType;
