@@ -48,19 +48,10 @@ public class JDBCAdapter {
     }
 
     public double getTotalMonthlyIncomeFor(int userId) {
-
-        String sql = "SELECT sum(mi.monthly_income_amount)\n" +
-                "FROM monthly_income mi\n" +
-                "JOIN users_monthly_income umi\n" +
-                "ON mi.monthly_income_id = umi.monthly_income_id\n" +
-                "JOIN users u\n" +
-                "ON umi.user_id = u.user_id\n" +
-                "WHERE u.user_id = ?;";
-
         Double income = 0.0;
 
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(SQLScripts.QUERY_TOTAL_MONTHLY_INCOME_FOR_USER);
             ps.setInt(1, userId);
 
             ResultSet rs = ps.executeQuery();
@@ -74,7 +65,7 @@ public class JDBCAdapter {
 
         } catch (SQLException exception) {
             System.out.println("Unable to get total monthly income for user: "
-                    + userId + " while executing: " + sql);
+                    + userId + " while executing: " + SQLScripts.QUERY_TOTAL_MONTHLY_INCOME_FOR_USER);
             exception.printStackTrace();
         }
 
@@ -82,38 +73,19 @@ public class JDBCAdapter {
     }
 
     public ArrayList<User> getUsers() {
-        String sql = "SELECT * FROM users;";
-
         ArrayList<User> users = null;
 
         try {
             Statement s = connection.createStatement();
-            ResultSet rs = s.executeQuery(sql);
+            ResultSet rs = s.executeQuery(SQLScripts.QUERY_ALL_USERS);
 
-            users = parseUsers(rs);
+            users = ResultSetProcessor.parseUsers(rs);
 
             rs.close();
             s.close();
 
         } catch (SQLException exception) {
             System.out.println("Unable to get users from " + DATABASE);
-        }
-
-        return users;
-    }
-
-    private ArrayList<User> parseUsers(ResultSet rs) throws SQLException {
-        ArrayList<User> users = new ArrayList<>();
-
-        while(rs.next()) {
-            int userId = rs.getInt(1);
-            String firstName = rs.getString(2);
-            String lastName = rs.getString(3);
-            String email = rs.getString(4);
-
-            User user = new User(firstName, lastName, email, userId);
-
-            users.add(user);
         }
 
         return users;
