@@ -2,14 +2,11 @@ package com.sadatmalik.fusion.model;
 
 public class Income {
 
-    private int id;
-    private double amount;
-    private String source;
+    protected int id;
+    protected double amount;
+    protected String source;
 
-    protected Income(int id, double amount, String source) {
-        this.id = id;
-        this.amount = amount;
-        this.source = source;
+    protected Income() {
     }
 
     public int getId() {
@@ -23,4 +20,5 @@ public class Income {
     public String getSource() {
         return source;
     }
+
 }

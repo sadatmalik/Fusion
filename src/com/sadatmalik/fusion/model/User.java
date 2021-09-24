@@ -15,6 +15,7 @@ public class User {
     private Map<AccountType, ArrayList<Account>> accountByType;
 
     private ArrayList<Debt> debts;
+    private ArrayList<Income> incomes;
 
     public User(String firstName, String lastName, String email, int userId) {
         this.firstName = firstName;
@@ -75,6 +76,14 @@ public class User {
         return debts;
     }
 
+    public ArrayList<Income> getIncomes() {
+        return incomes;
+    }
+
+    public void setIncomes(ArrayList<Income> incomes) {
+        this.incomes = incomes;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -82,6 +91,10 @@ public class User {
                 ", lastName='" + lastName + '\'' +
                 ", email='" + email + '\'' +
                 ", userId=" + userId +
+                ", accounts=" + accounts +
+                ", accountByType=" + accountByType +
+                ", debts=" + debts +
+                ", incomes=" + incomes +
                 '}';
     }
 }

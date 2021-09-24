@@ -2,6 +2,7 @@ package com.sadatmalik.fusion.controller;
 
 import com.sadatmalik.fusion.model.Account;
 import com.sadatmalik.fusion.model.Debt;
+import com.sadatmalik.fusion.model.Income;
 import com.sadatmalik.fusion.model.User;
 import com.sadatmalik.fusion.services.Lookup;
 
@@ -90,6 +91,8 @@ public class Controller {
         activeUser.setDebts(debts);
 
         // income
+        ArrayList<Income> incomes = Lookup.incomesFor(activeUser);
+        activeUser.setIncomes(incomes);
 
         // expenses
 

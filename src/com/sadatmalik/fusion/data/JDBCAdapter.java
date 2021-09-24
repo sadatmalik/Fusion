@@ -1,9 +1,6 @@
 package com.sadatmalik.fusion.data;
 
-import com.sadatmalik.fusion.model.Account;
-import com.sadatmalik.fusion.model.AccountType;
-import com.sadatmalik.fusion.model.Debt;
-import com.sadatmalik.fusion.model.User;
+import com.sadatmalik.fusion.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -219,6 +216,102 @@ public class JDBCAdapter {
         }
 
         return debts;
+    }
+
+    public ArrayList<Income> getIncomesFor(int userId) {
+        ArrayList<Income> incomes = getMonthlyIncomesFor(userId);
+        incomes.addAll(getWeeklyIncomesFor(userId));
+        return incomes;
+    }
+
+    private ArrayList<Income> getMonthlyIncomesFor(int userId) {
+        String sql = "SELECT mi.*\n" +
+                "FROM monthly_income mi\n" +
+                "JOIN users_monthly_income umi\n" +
+                "ON mi.monthly_income_id = umi.monthly_income_id\n" +
+                "JOIN users u\n" +
+                "ON umi.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?;";
+
+        ArrayList<Income> incomes = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            incomes = parseMonthlyIncomes(rs);
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException exception) {
+            System.out.println("Unable to get monthly incomes for user " + userId + " from " + DATABASE);
+        }
+
+        return incomes;
+    }
+
+    private ArrayList<Income> getWeeklyIncomesFor(int userId) {
+        String sql = "SELECT wi.*\n" +
+                "FROM income wi\n" +
+                "JOIN users_income uwi\n" +
+                "ON wi.income_id = uwi.income_id\n" +
+                "JOIN users u\n" +
+                "ON uwi.user_id = u.user_id\n" +
+                "WHERE u.user_id = ?;";
+
+        ArrayList<Income> incomes = null;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, userId);
+            ResultSet rs = ps.executeQuery();
+
+            incomes = parseWeeklyIncomes(rs);
+
+            rs.close();
+            ps.close();
+
+        } catch (SQLException exception) {
+            System.out.println("Unable to get weekly incomes for user " + userId + " from " + DATABASE);
+        }
+
+        return incomes;
+    }
+
+    private ArrayList<Income> parseMonthlyIncomes(ResultSet rs) throws SQLException {
+        ArrayList<Income> incomes = new ArrayList<>();
+
+        while(rs.next()) {
+            int id = rs.getInt(1);
+            double amount = rs.getDouble(2);
+            String source = rs.getString(3);
+            int dayOfMonthReceived = rs.getInt(4);
+
+            Income income = new MonthlyIncome(id, amount, source, dayOfMonthReceived);
+
+            incomes.add(income);
+        }
+
+        return incomes;
+    }
+
+    private ArrayList<Income> parseWeeklyIncomes(ResultSet rs) throws SQLException {
+        ArrayList<Income> incomes = new ArrayList<>();
+
+        while(rs.next()) {
+            int id = rs.getInt(1);
+            double amount = rs.getDouble(2);
+            String source = rs.getString(3);
+            int weeklyInterval = rs.getInt(4);
+
+            Income income = new WeeklyIncome(id, amount, source, weeklyInterval);
+
+            incomes.add(income);
+        }
+
+        return incomes;
     }
 
 
