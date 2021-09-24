@@ -80,20 +80,24 @@ public class CommandLine {
 
     private void displayAccountBalances(ArrayList<Account> accounts) {
         for (Account account : accounts) {
-            System.out.println("Your " + account.getName().toUpperCase() + " " +
-                    account.getType() + " account balance is: " + account.getBalance());
+            System.out.printf("Your %s %s account balance is: £%,.2f\n", account.getName().toUpperCase(),
+                    account.getType(),account.getBalance());
         }
     }
 
     private void displayDebts(ArrayList<Debt> debts) {
         for (Debt debt : debts) {
-            System.out.println("Your " + debt.getLender().toUpperCase() + " debt is: "
-                    + debt.getTotalOwed());
+            System.out.printf("Your %s debt is: %,.2f\n",debt.getLender().toUpperCase(),
+                    debt.getTotalOwed());
         }
     }
 
     public void displayIncomeDebtRatio(String incomeDebtRatio) {
         System.out.println("\nYour income to debt ratio is currently " + incomeDebtRatio + " to 1 ");
+    }
+
+    public void displaySavingsForMonth(double savingsForMonth) {
+        System.out.printf("You are currently saving £%,.2f per month\n", savingsForMonth);
     }
 
     public void close() {

@@ -101,6 +101,7 @@ public class Controller {
         cli.displayQuickStats(activeUser);
         String incomeDebtRatio = Analyzer.getIncomeDebtRatioFor(activeUser);
         cli.displayIncomeDebtRatio(incomeDebtRatio);
+        cli.displaySavingsForMonth(Analyzer.getCurrentMonthSaving(activeUser));
     }
 
 
