@@ -9,8 +9,8 @@ import java.util.Arrays;
 
 public class Controller {
 
-    private ArrayList<User> users;
-    private CommandLine cli;
+    private final ArrayList<User> users;
+    private final CommandLine cli;
 
     private User activeUser;
 
@@ -80,6 +80,8 @@ public class Controller {
 
     private void quickStats() {
         // get stats
+        System.out.println("\nWelcome to QuickStats!");
+        System.out.println("----------------------");
 
         // account balances
         ArrayList<Account> accounts = Lookup.accountsFor(activeUser);

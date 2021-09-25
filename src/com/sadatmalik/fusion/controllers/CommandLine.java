@@ -87,7 +87,7 @@ public class CommandLine {
 
     private void displayDebts(ArrayList<Debt> debts) {
         for (Debt debt : debts) {
-            System.out.printf("Your %s debt is: %,.2f\n",debt.getLender().toUpperCase(),
+            System.out.printf("Your %s debt is: £%,.2f\n",debt.getLender().toUpperCase(),
                     debt.getTotalOwed());
         }
     }
