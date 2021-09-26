@@ -60,7 +60,7 @@ public class CommandLine {
             selection = commandLine.nextInt();
         }
 
-        // return selected main menu item
+        // map int selection to main menu item
         return MainMenuItem.getMenuItemById(selection);
     }
 
