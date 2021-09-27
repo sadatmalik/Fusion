@@ -1,11 +1,10 @@
 package com.sadatmalik.fusion.controllers;
 
-import com.sadatmalik.fusion.model.Account;
-import com.sadatmalik.fusion.model.AccountType;
-import com.sadatmalik.fusion.model.Debt;
-import com.sadatmalik.fusion.model.User;
+import com.sadatmalik.fusion.model.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CommandLine {
@@ -126,6 +125,81 @@ public class CommandLine {
         System.out.printf("Total income for month: £%,.2f\n", totalIncomeForMonth);
         System.out.printf("Total expenses for month: £%,.2f\n", totalExpensesForMonth);
         System.out.println();
+    }
+
+    public Income getIncomeItemToEdit(User user) {
+        Map<Integer, Income> incomeByMenuNumber = displayItemizedIncome(user);
+        System.out.println("\nPlease select the income item you would like to edit.");
+
+        int selection = commandLine.nextInt();
+        while (!(selection > 0 && selection <= incomeByMenuNumber.size())) {
+            System.out.println("Please select an income item from the list [1-" + incomeByMenuNumber.size() + "]");
+            selection = commandLine.nextInt();
+        }
+        return incomeByMenuNumber.get(selection);
+    }
+
+    // Returns a map of all income for user by menu item number
+    private Map<Integer, Income> displayItemizedIncome(User user) {
+        Map<Integer, Income> incomeByMenuNumber = new HashMap<>();
+        int menuNumber = 1;
+
+        System.out.println("Monthly income:");
+        System.out.println("----------------");
+        for (Income income : user.getIncomes()) {
+            if (income instanceof MonthlyIncome) {
+                MonthlyIncome monthlyIncome = (MonthlyIncome) income;
+                System.out.printf("%d) %s: £%,.2f    received on month day %d%n", menuNumber,
+                        monthlyIncome.getSource(), monthlyIncome.getAmount(), monthlyIncome.getDayOfMonthReceived());
+                incomeByMenuNumber.put(menuNumber, income);
+                menuNumber++;
+            }
+        }
+        System.out.println("\nWeekly income:");
+        System.out.println("----------------");
+        for (Income income : user.getIncomes()) {
+            if (income instanceof WeeklyIncome) {
+                WeeklyIncome weeklyIncome = (WeeklyIncome) income;
+                System.out.printf("%d) %s: £%,.2f    received every %d week(s)%n", menuNumber,
+                        weeklyIncome.getSource(), weeklyIncome.getAmount(), weeklyIncome.getWeeklyInterval());
+                incomeByMenuNumber.put(menuNumber, income);
+                menuNumber++;
+            }
+        }
+        return incomeByMenuNumber;
+    }
+
+    public void editIncomeItem(Income item) {
+        if (item instanceof WeeklyIncome) {
+            editWeeklyIncomeItem((WeeklyIncome) item);
+        } else if (item instanceof MonthlyIncome) {
+            editMonthlyIncomeItem((MonthlyIncome) item);
+        }
+    }
+
+    private void editWeeklyIncomeItem(WeeklyIncome income) {
+        // display the selected item
+        System.out.println("Income item: " + income.getSource());
+        System.out.println("Amount: " + income.getAmount());
+        System.out.println("Weekly interval: " + income.getWeeklyInterval());
+
+        // display menu options for editing item
+        System.out.println("Select 1 to edit item name, 2 to edit the amount, 3 to edit the weekly interval, 4 to delete." +
+                " Type [0] to choose another item to edit.");
+
+        int selection = commandLine.nextInt();
+        while (!(selection >= 0 && selection <= 4)) {
+            System.out.println("Sorry, that's not a valid selection. Please choose from [0-4]");
+            selection = commandLine.nextInt();
+        }
+
+        // @todo pick up from here tomorrow 
+    }
+
+    private void editMonthlyIncomeItem(MonthlyIncome income) {
+        // display the selected item
+
+        // display menu options for editing item
     }
 
     public void close() {

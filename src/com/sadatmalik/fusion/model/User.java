@@ -12,12 +12,18 @@ public class User {
     private String email;
     private int userId;
 
+    // holds user's accounts
     private ArrayList<Account> accounts;
+
+    // stores each account by the type of account, e.g. cash, savings, etc.
     private Map<AccountType, ArrayList<Account>> accountByType;
 
+    // hold user's debts, income(s), and expenses
     private ArrayList<Debt> debts;
     private ArrayList<Income> incomes;
     private ArrayList<Expense> expenses;
+
+    // @todo will likely need a debt, income, and expense map by 'id' to facilitate DB updates?
 
     public User(String firstName, String lastName, String email, int userId) {
         this.firstName = firstName;
