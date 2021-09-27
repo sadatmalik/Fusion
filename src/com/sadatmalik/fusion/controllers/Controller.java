@@ -53,7 +53,7 @@ public class Controller {
                     break;
 
                 case ADD_EDIT_INCOME_EXPENSES:
-
+                    viewEditAddIncomeExpenses();
                     break;
 
                 case RUN_REPORTS:
@@ -104,6 +104,27 @@ public class Controller {
         String incomeDebtRatio = Analyzer.getIncomeDebtRatioFor(activeUser);
         cli.displayIncomeDebtRatio(incomeDebtRatio);
         cli.displaySavingsForMonth(Analyzer.getCurrentMonthSaving(activeUser));
+    }
+
+    private void viewEditAddIncomeExpenses() {
+        // income
+        ArrayList<Income> incomes = Lookup.incomesFor(activeUser);
+        activeUser.setIncomes(incomes);
+
+        // expenses
+        ArrayList<Expense> expenses = Lookup.expensesFor(activeUser);
+        activeUser.setExpenses(expenses);
+
+        // display income and expense line totals
+        double totalIncomeForMonth = Analyzer.totalIncomeForMonth(activeUser);
+        double totalExpensesForMonth = Analyzer.totalExpensesForMonth(activeUser);
+        cli.displayIncomeExpensesLineTotals(totalIncomeForMonth, totalExpensesForMonth);
+
+        // show view/edit/add income/expenses detail menu
+        cli.showIncomeExpenseMenu();
+        IncomeExpenseMenuItem selection = cli.getIncomeExpenseMenuSelection();
+        System.out.println(selection);
+
     }
 
 

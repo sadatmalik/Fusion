@@ -20,7 +20,7 @@ public class Analyzer {
 
 
 
-    private static double totalIncomeForMonth(User user) {
+    public static double totalIncomeForMonth(User user) {
         double monthlyIncome = 0;
 
         // calculate the total monthly income
@@ -41,7 +41,7 @@ public class Analyzer {
         return monthlyIncome;
     }
 
-    private static double totalExpensesForMonth(User user) {
+    public static double totalExpensesForMonth(User user) {
         double monthlyExpense = 0;
 
         // calculate the total monthly expenses
@@ -69,4 +69,5 @@ public class Analyzer {
         }
         return monthlyDebt;
     }
+
 }

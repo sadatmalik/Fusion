@@ -64,6 +64,28 @@ public class CommandLine {
         return MainMenuItem.getMenuItemById(selection);
     }
 
+    public void showIncomeExpenseMenu() {
+        for (IncomeExpenseMenuItem menuItem : IncomeExpenseMenuItem.values()) {
+            System.out.println(menuItem.getItemNumber() + ") " + menuItem.getMenuText());
+        }
+    }
+
+    public IncomeExpenseMenuItem getIncomeExpenseMenuSelection() {
+        int selection = commandLine.nextInt();
+
+        // validate selection
+        while (!(selection > 0 && selection <= IncomeExpenseMenuItem.values().length)) {
+            System.out.println("\nPlease select from income/expense menu options [1 - " +
+                    IncomeExpenseMenuItem.values().length + "]");
+            showIncomeExpenseMenu();
+            selection = commandLine.nextInt();
+        }
+
+        // map int selection to main menu item
+        return IncomeExpenseMenuItem.getMenuItemById(selection);
+
+    }
+
     public void displayQuickStats(User user) {
         System.out.println();
         if (user.getAccounts() != null) {
@@ -98,6 +120,12 @@ public class CommandLine {
 
     public void displaySavingsForMonth(double savingsForMonth) {
         System.out.printf("You are currently saving £%,.2f per month\n", savingsForMonth);
+    }
+
+    public void displayIncomeExpensesLineTotals(double totalIncomeForMonth, double totalExpensesForMonth) {
+        System.out.printf("Total income for month: £%,.2f\n", totalIncomeForMonth);
+        System.out.printf("Total expenses for month: £%,.2f\n", totalExpensesForMonth);
+        System.out.println();
     }
 
     public void close() {
