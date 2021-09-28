@@ -16,6 +16,16 @@ public class CommandLine {
         commandLine = new Scanner(System.in);
     }
 
+    private int getNextInt() {
+        while (true) {
+            try {
+                return Integer.parseInt(commandLine.nextLine());
+            } catch (NumberFormatException nfe) {
+                System.out.println("Please enter a number value");
+            }
+        }
+    }
+
     public User selectUser(ArrayList<User> users) {
         User activeUser = null;
 
@@ -26,7 +36,7 @@ public class CommandLine {
         }
         System.out.println(users.size()+1 + ". Create new user");
 
-        int selection = commandLine.nextInt();
+        int selection = getNextInt();
 
         if (selection > 0 && selection <= users.size()) {
             // select user from users
@@ -50,13 +60,14 @@ public class CommandLine {
     }
 
     public MainMenuItem getMainMenuSelection() {
-        int selection = commandLine.nextInt();
+        // @todo surround with try/catch to check it's an int!
+        int selection = getNextInt();
 
         // validate selection
         while (!(selection > 0 && selection <= MainMenuItem.values().length)) {
             System.out.println("\nPlease select from main menu options [1 - " + MainMenuItem.values().length + "]");
             showMainMenu();
-            selection = commandLine.nextInt();
+            selection = getNextInt();
         }
 
         // map int selection to main menu item
@@ -70,14 +81,14 @@ public class CommandLine {
     }
 
     public IncomeExpenseMenuItem getIncomeExpenseMenuSelection() {
-        int selection = commandLine.nextInt();
+        int selection = getNextInt();
 
         // validate selection
         while (!(selection > 0 && selection <= IncomeExpenseMenuItem.values().length)) {
             System.out.println("\nPlease select from income/expense menu options [1 - " +
                     IncomeExpenseMenuItem.values().length + "]");
             showIncomeExpenseMenu();
-            selection = commandLine.nextInt();
+            selection = getNextInt();
         }
 
         // map int selection to main menu item
@@ -131,10 +142,10 @@ public class CommandLine {
         Map<Integer, Income> incomeByMenuNumber = displayItemizedIncome(user);
         System.out.println("\nPlease select the income item you would like to edit.");
 
-        int selection = commandLine.nextInt();
+        int selection = getNextInt();
         while (!(selection > 0 && selection <= incomeByMenuNumber.size())) {
             System.out.println("Please select an income item from the list [1-" + incomeByMenuNumber.size() + "]");
-            selection = commandLine.nextInt();
+            selection = getNextInt();
         }
         return incomeByMenuNumber.get(selection);
     }
@@ -178,20 +189,46 @@ public class CommandLine {
     }
 
     private void editWeeklyIncomeItem(WeeklyIncome income) {
+        String newSource = null;
+        double newAmount = -1;
+        int newWeeklyInterval = -1;
+
         // display the selected item
-        System.out.println("Income item: " + income.getSource());
-        System.out.println("Amount: " + income.getAmount());
-        System.out.println("Weekly interval: " + income.getWeeklyInterval());
-
-        // display menu options for editing item
-        System.out.println("Select 1 to edit item name, 2 to edit the amount, 3 to edit the weekly interval, 4 to delete." +
-                " Type [0] to choose another item to edit.");
-
-        int selection = commandLine.nextInt();
-        while (!(selection >= 0 && selection <= 4)) {
-            System.out.println("Sorry, that's not a valid selection. Please choose from [0-4]");
-            selection = commandLine.nextInt();
+        System.out.print("Press [return] to keep current value \'" + income.getSource() + "\'" +
+                " or enter new source: ");
+        String input = commandLine.nextLine();
+        if (!"".equals(input)) {
+            newSource = input;
         }
+
+        System.out.print("Press [return] to keep current value \'" + income.getAmount() + "\'" +
+                " or enter new amount: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                newAmount = Double.parseDouble(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for new amount: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        System.out.println("Press [return] to keep current value \'" + income.getWeeklyInterval() + "\'" +
+                " or enter new weekly interval: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                newWeeklyInterval = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for new weekly interval: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        System.out.println("Updating income - source = " + newSource + ", amount = " + newAmount +
+                ", weekly interval = " + newWeeklyInterval);
 
         // @todo pick up from here tomorrow 
     }

@@ -55,10 +55,8 @@ public class User {
     public void setAccounts(ArrayList<Account> accounts) {
         this.accounts = accounts;
 
-        // lazy initialise accounts map
-        if (accountByType == null) {
-            accountByType = new HashMap<>();
-        }
+        // initialize maps each time to avoid duplicate map entries
+        accountByType = new HashMap<>();
 
         // add accounts by account type
         for (Account account : accounts) {
