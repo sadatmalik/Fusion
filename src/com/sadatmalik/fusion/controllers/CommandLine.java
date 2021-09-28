@@ -1,5 +1,6 @@
 package com.sadatmalik.fusion.controllers;
 
+import com.sadatmalik.fusion.data.DBWriter;
 import com.sadatmalik.fusion.model.*;
 
 import java.util.ArrayList;
@@ -194,15 +195,15 @@ public class CommandLine {
         int newWeeklyInterval = -1;
 
         // display the selected item
-        System.out.print("Press [return] to keep current value \'" + income.getSource() + "\'" +
-                " or enter new source: ");
+        System.out.print("Type 'return' to keep current Income Source '" + income.getSource() + "'" +
+                " or enter new value: ");
         String input = commandLine.nextLine();
         if (!"".equals(input)) {
             newSource = input;
         }
 
-        System.out.print("Press [return] to keep current value \'" + income.getAmount() + "\'" +
-                " or enter new amount: ");
+        System.out.print("Type 'return' to keep current Amount '" + income.getAmount() + "'" +
+                " or enter new value: ");
         input = commandLine.nextLine();
         while (!"".equals(input)) {
             try {
@@ -214,8 +215,8 @@ public class CommandLine {
             }
         }
 
-        System.out.println("Press [return] to keep current value \'" + income.getWeeklyInterval() + "\'" +
-                " or enter new weekly interval: ");
+        System.out.print("Type 'return' to keep current Weekly Interval '" + income.getWeeklyInterval() + "'" +
+                " or enter new value: ");
         input = commandLine.nextLine();
         while (!"".equals(input)) {
             try {
@@ -227,16 +228,29 @@ public class CommandLine {
             }
         }
 
-        System.out.println("Updating income - source = " + newSource + ", amount = " + newAmount +
-                ", weekly interval = " + newWeeklyInterval);
+        int rowsAffected = DBWriter.updateIncome(income, newSource, newAmount, newWeeklyInterval);
 
-        // @todo pick up from here tomorrow 
+        if (rowsAffected == 1) {
+            System.out.println("\nItem updated");
+        } else {
+            System.out.println("\nNo item was updated");
+        }
     }
 
     private void editMonthlyIncomeItem(MonthlyIncome income) {
         // display the selected item
 
         // display menu options for editing item
+    }
+
+    public boolean editAnotherItem() {
+        System.out.println("\nEdit another item (yes/no) or type 'return' to return to home menu.");
+        String another = commandLine.nextLine();
+        if (another.equalsIgnoreCase("YES") || another.equalsIgnoreCase("Y")) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void close() {

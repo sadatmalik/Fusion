@@ -127,8 +127,10 @@ public class Controller {
         // switch on selected menu option
         switch(selection) {
             case VIEW_EDIT_DETAILED_INCOME:
-                Income itemToEdit = cli.getIncomeItemToEdit(activeUser);
-                cli.editIncomeItem(itemToEdit);
+                do {
+                    Income itemToEdit = cli.getIncomeItemToEdit(activeUser);
+                    cli.editIncomeItem(itemToEdit);
+                } while (cli.editAnotherItem());
                 break;
 
             case ADD_NEW_INCOME_ITEM:

@@ -61,4 +61,23 @@ public class SQLScripts {
             "JOIN users u\n" +
             "ON uwex.user_id = u.user_id\n" +
             "WHERE u.user_id = ?;";
+
+
+    // Update Weekly Income
+    public static final String UPDATE_WEEKLY_INCOME_AMOUNT = "UPDATE income\n" +
+            "SET income_amount = ?\n" +
+            "WHERE income_id = ?;";
+
+    public static final String UPDATE_WEEKLY_INCOME_WEEKLY_INTERVAL = "UPDATE income\n" +
+            "SET income_weekly_interval = ?\n" +
+            "WHERE income_id = ?;";
+
+    public static final String UPDATE_WEEKLY_INCOME_SOURCE = "UPDATE income\n" +
+            "SET income_source = ?\n" +
+            "WHERE income_id = ?;";
+
+    public static final String UPDATE_WEEKLY_INCOME_ALL = "UPDATE income\n" +
+            "SET income_source = ?, income_amount = ?, income_weekly_interval = ?\n" +
+            "WHERE income_id = ?;";
+
 }

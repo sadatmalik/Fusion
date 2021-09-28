@@ -38,6 +38,10 @@ public class JDBCAdapter {
 
     }
 
+    public static Connection getConnection() {
+        return connection;
+    }
+
     public void close() {
         try {
             connection.close();
