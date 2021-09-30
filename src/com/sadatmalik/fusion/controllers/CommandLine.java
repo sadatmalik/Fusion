@@ -253,6 +253,87 @@ public class CommandLine {
         }
     }
 
+    public void addNewIncomeItem(User user) {
+        String source = null;
+        double amount = -1;
+        int weeklyInterval = -1;
+        int accountId = -1;
+
+        System.out.println("\nEnter new income item details:");
+
+        // source
+        System.out.print("Income source: ");
+        String input = commandLine.nextLine();
+        if (!"".equals(input)) {
+            source = input;
+        }
+
+        // amount
+        System.out.print("Amount: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                amount = Double.parseDouble(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for amount: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        // interval
+        System.out.print("Weekly interval ('0' for one off income): ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                // make sure it's a positive integer
+                int value = Integer.parseInt(input);
+                if (value < 0) {
+                    System.out.print("Please enter a positive numerical value (or 0) for weekly interval: ");
+                    input = commandLine.nextLine();
+                    continue;
+                } else {
+                    weeklyInterval = value;
+                    break;
+                }
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for  weekly interval: ");
+                input = commandLine.nextLine();
+            }
+        }
+        accountId = selectAccount(user);
+        DBWriter.insertIncomeForAccount(source, amount, weeklyInterval, accountId);
+        System.out.println("\nSuccess");
+    }
+
+    private int selectAccount(User user) {
+        System.out.println("\nPlease select the account this be paid in to: ");
+
+        // @todo flow issue - accounts may not yet have been loaded -- currently via call to Controller.QuickStats()
+        ArrayList<Account> accounts = user.getAccounts();
+        Account account = null;
+
+        for (int i = 1; i <= accounts.size(); i++) {
+            Account a = accounts.get(i-1);
+            System.out.println(i + ". " + a.getName().toUpperCase() + " " + a.getType());
+        }
+
+        int selection = getNextInt();
+
+        if (selection > 0 && selection <= accounts.size()) {
+            // select user from users
+            account = accounts.get(selection-1);
+
+        } else {
+            // invalid selection, try again
+            System.out.println("\nPlease select user from options [1 - " + (accounts.size()+1) + "]");
+            selectAccount(user);
+        }
+
+        return account.getAccountId();
+
+    }
+
     public void close() {
         commandLine.close();
     }

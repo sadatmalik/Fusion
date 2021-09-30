@@ -53,7 +53,7 @@ public class Controller {
                     break;
 
                 case ADD_EDIT_INCOME_EXPENSES:
-                    viewEditAddIncomeExpenses();
+                    addEditIncomeExpenses();
                     break;
 
                 case RUN_REPORTS:
@@ -106,7 +106,7 @@ public class Controller {
         cli.displaySavingsForMonth(Analyzer.getCurrentMonthSaving(activeUser));
     }
 
-    private void viewEditAddIncomeExpenses() {
+    private void addEditIncomeExpenses() {
         // income
         ArrayList<Income> incomes = Lookup.incomesFor(activeUser);
         activeUser.setIncomes(incomes);
@@ -134,6 +134,8 @@ public class Controller {
                 break;
 
             case ADD_NEW_INCOME_ITEM:
+                cli.addNewIncomeItem(activeUser);
+                break;
 
             case VIEW_EDIT_DETAILED_EXPENSES:
 

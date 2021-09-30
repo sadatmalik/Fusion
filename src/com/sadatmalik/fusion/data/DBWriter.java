@@ -3,7 +3,9 @@ package com.sadatmalik.fusion.data;
 import com.sadatmalik.fusion.model.Income;
 import com.sadatmalik.fusion.model.WeeklyIncome;
 
+import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DBWriter {
@@ -15,11 +17,11 @@ public class DBWriter {
         }
 
         int rowsAffected = 0;
-        String sql = null;
         try {
 
             PreparedStatement ps = null;
 
+            // @todo refactor these -- if the values is null, pull it from income
             // update source only
             if (amount == -1 && weeklyInterval == -1) {
                 amount = income.getAmount();
@@ -63,5 +65,23 @@ public class DBWriter {
 
         // return the number of rows affected by this update - should be 1
         return rowsAffected;
+    }
+
+    public static void insertIncomeForAccount(String source, double amount, int weeklyInterval,
+                                              int accountId) {
+        try {
+            CallableStatement cs = JDBCAdapter.getConnection().prepareCall(SQLScripts.SP_INSERT_WEEKLY_INCOME);
+
+            cs.setString(1, source);
+            cs.setDouble(2, amount);
+            cs.setInt(3, weeklyInterval);
+            cs.setInt(4, accountId);
+
+            cs.execute();
+
+        } catch (SQLException exception) {
+            System.out.println("Error inserting weekly income with SP call - " + SQLScripts.SP_INSERT_WEEKLY_INCOME);
+        }
+
     }
 }

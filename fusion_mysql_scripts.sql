@@ -124,3 +124,20 @@ JOIN users u
 ON ud.user_id = u.user_id
 WHERE u.user_id = '1';
 
+# Update income
+UPDATE income
+SET income_amount = 65
+WHERE income_id = 1;
+
+UPDATE income
+SET income_weekly_interval = 3
+WHERE income_id = 1;
+
+UPDATE income
+SET income_source = "LH"
+WHERE income_id = 1;
+
+UPDATE income
+SET income_source = "LH", income_amount = 65, income_weekly_interval = 3
+WHERE income_id = 1;
+

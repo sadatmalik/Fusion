@@ -80,4 +80,7 @@ public class SQLScripts {
             "SET income_source = ?, income_amount = ?, income_weekly_interval = ?\n" +
             "WHERE income_id = ?;";
 
+    // takes the income_source, income_amount, weekly_interval, account_id as parameters
+    public static final String SP_INSERT_WEEKLY_INCOME = "{CALL CreateIncome(?, ?, ?, ?)}";
+
 }
