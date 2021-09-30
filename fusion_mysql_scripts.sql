@@ -141,3 +141,18 @@ UPDATE income
 SET income_source = "LH", income_amount = 65, income_weekly_interval = 3
 WHERE income_id = 1;
 
+INSERT INTO income
+(income_source, income_amount, income_weekly_interval)
+VALUES ("JaJa", 65, 2);
+
+INSERT INTO income_accounts
+(income_id, account_id)
+VALUES(LAST_INSERT_ID(), 1);
+
+CALL CreateIncome("JaJa", 65, 2, 1);
+
+UPDATE monthly_income
+SET monthly_income_source = "HSC", monthly_income_amount = 1900, day_of_month_recvd = 6
+WHERE monthly_income_id = 1;
+
+CALL CreateMonthlyIncome("Discover", 5800, 25, 1);

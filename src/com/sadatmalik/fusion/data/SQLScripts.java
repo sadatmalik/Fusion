@@ -85,6 +85,8 @@ public class SQLScripts {
             "WHERE monthly_income_id = ?;";
 
     // takes the income_source, income_amount, weekly_interval, account_id as parameters
-    public static final String SP_INSERT_WEEKLY_INCOME = "{CALL CreateIncome(?, ?, ?, ?)}";
+    public static final String SP_INSERT_WEEKLY_INCOME = "{CALL CreateIncome(?, ?, ?, ?, ?)}";
 
+    // takes the income_source, income_amount, day_of_month, account_id as parameters
+    public static final String SP_INSERT_MONTHLY_INCOME = "{CALL CreateMonthlyIncome(?, ?, ?, ?, ?)}";
 }

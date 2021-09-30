@@ -302,7 +302,6 @@ public class CommandLine {
     public void addNewIncomeItem(User user) {
         String source = null;
         double amount = -1;
-        int weeklyInterval = -1;
         int accountId = -1;
 
         System.out.println("\nEnter new income item details:");
@@ -327,9 +326,36 @@ public class CommandLine {
             }
         }
 
-        // interval
+        accountId = selectAccount(user);
+
+        if (isWeeklyIncome()) {
+            // weekly interval for weekly incomes
+            int weeklyInterval = getWeeklyInterval();
+            DBWriter.insertIncomeForAccount(source, amount, weeklyInterval, accountId, user.getUserId());
+            System.out.println("\nSuccess");
+        } else {
+            // day of month received for monthly incomes
+            int dayOfMonth = getDayOfMonthReceived();
+            DBWriter.insertMonthlyIncomeForAccount(source, amount, dayOfMonth, accountId, user.getUserId());
+            System.out.println("\nSuccess");
+        }
+
+    }
+
+    private boolean isWeeklyIncome() {
+        System.out.println("Is this weekly or monthly?  ('w' for weekly, 'm' for monthly) ");
+        String weeklyMonthly = commandLine.nextLine();
+        if (!(weeklyMonthly.equalsIgnoreCase("w") || weeklyMonthly.equalsIgnoreCase("m"))) {
+            return isWeeklyIncome();
+        } else {
+            return weeklyMonthly.equalsIgnoreCase("w");
+        }
+    }
+
+    private int getWeeklyInterval() {
         System.out.print("Weekly interval ('0' for one off income): ");
-        input = commandLine.nextLine();
+        String input = commandLine.nextLine();
+        int interval = -1;
         while (!"".equals(input)) {
             try {
                 // make sure it's a positive integer
@@ -339,7 +365,7 @@ public class CommandLine {
                     input = commandLine.nextLine();
                     continue;
                 } else {
-                    weeklyInterval = value;
+                    interval = value;
                     break;
                 }
             } catch (NumberFormatException nfe) {
@@ -347,9 +373,31 @@ public class CommandLine {
                 input = commandLine.nextLine();
             }
         }
-        accountId = selectAccount(user);
-        DBWriter.insertIncomeForAccount(source, amount, weeklyInterval, accountId);
-        System.out.println("\nSuccess");
+        return interval;
+    }
+
+    private int getDayOfMonthReceived() {
+        System.out.print("Day of Month received: ");
+        String input = commandLine.nextLine();
+        int dom = -1;
+        while (!"".equals(input)) {
+            try {
+                // make sure it's a positive integer
+                int value = Integer.parseInt(input);
+                if (value < 0) {
+                    System.out.print("Please enter a positive numerical value for day of month received: ");
+                    input = commandLine.nextLine();
+                    continue;
+                } else {
+                    dom = value;
+                    break;
+                }
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for day of month received: ");
+                input = commandLine.nextLine();
+            }
+        }
+        return dom;
     }
 
     private int selectAccount(User user) {

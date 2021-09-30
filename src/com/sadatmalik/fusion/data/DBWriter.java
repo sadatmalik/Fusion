@@ -105,7 +105,7 @@ public class DBWriter {
     }
 
     public static void insertIncomeForAccount(String source, double amount, int weeklyInterval,
-                                              int accountId) {
+                                              int accountId, int userId) {
         try {
             CallableStatement cs = JDBCAdapter.getConnection().prepareCall(SQLScripts.SP_INSERT_WEEKLY_INCOME);
 
@@ -113,11 +113,30 @@ public class DBWriter {
             cs.setDouble(2, amount);
             cs.setInt(3, weeklyInterval);
             cs.setInt(4, accountId);
+            cs.setInt(5, userId);
 
             cs.execute();
 
         } catch (SQLException exception) {
             System.out.println("Error inserting weekly income with SP call - " + SQLScripts.SP_INSERT_WEEKLY_INCOME);
+        }
+    }
+
+    public static void insertMonthlyIncomeForAccount(String source, double amount, int dayOfMonth,
+                                                     int accountId, int userId) {
+        try {
+            CallableStatement cs = JDBCAdapter.getConnection().prepareCall(SQLScripts.SP_INSERT_MONTHLY_INCOME);
+
+            cs.setString(1, source);
+            cs.setDouble(2, amount);
+            cs.setInt(3, dayOfMonth);
+            cs.setInt(4, accountId);
+            cs.setInt(5, userId);
+
+            cs.execute();
+
+        } catch (SQLException exception) {
+            System.out.println("Error inserting monthly income with SP call - " + SQLScripts.SP_INSERT_MONTHLY_INCOME);
         }
 
     }
