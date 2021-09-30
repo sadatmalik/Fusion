@@ -238,9 +238,55 @@ public class CommandLine {
     }
 
     private void editMonthlyIncomeItem(MonthlyIncome income) {
-        // display the selected item
+        // display the selected item with edit options
+        String newSource = null;
+        double newAmount = -1;
+        int dayOfMonth = -1;
 
-        // display menu options for editing item
+        // display the selected item
+        System.out.print("Type 'return' to keep current Income Source '" + income.getSource() + "'" +
+                " or enter new value: ");
+        String input = commandLine.nextLine();
+        if (!"".equals(input)) {
+            newSource = input;
+        }
+
+        System.out.print("Type 'return' to keep current Amount '" + income.getAmount() + "'" +
+                " or enter new value: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                // @todo validate for positive amount
+                newAmount = Double.parseDouble(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for new amount: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        System.out.print("Type 'return' to keep current Day of Month received '" + income.getDayOfMonthReceived() + "'" +
+                " or enter new value: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                // @todo check for valid date range
+                dayOfMonth = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for Day of Month interval: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        int rowsAffected = DBWriter.updateMonthlyIncome(income, newSource, newAmount, dayOfMonth);
+
+        if (rowsAffected == 1) {
+            System.out.println("\nItem updated");
+        } else {
+            System.out.println("\nNo item was updated");
+        }
+
     }
 
     public boolean editAnotherItem() {

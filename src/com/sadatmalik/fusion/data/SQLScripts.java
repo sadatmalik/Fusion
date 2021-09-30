@@ -80,6 +80,10 @@ public class SQLScripts {
             "SET income_source = ?, income_amount = ?, income_weekly_interval = ?\n" +
             "WHERE income_id = ?;";
 
+    public static final String UPDATE_MONTHLY_INCOME_ALL = "UPDATE monthly_income\n" +
+            "SET monthly_income_source = ?, monthly_income_amount = ?, day_of_month_recvd = ?\n" +
+            "WHERE monthly_income_id = ?;";
+
     // takes the income_source, income_amount, weekly_interval, account_id as parameters
     public static final String SP_INSERT_WEEKLY_INCOME = "{CALL CreateIncome(?, ?, ?, ?)}";
 

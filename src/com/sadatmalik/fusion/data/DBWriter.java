@@ -1,6 +1,7 @@
 package com.sadatmalik.fusion.data;
 
 import com.sadatmalik.fusion.model.Income;
+import com.sadatmalik.fusion.model.MonthlyIncome;
 import com.sadatmalik.fusion.model.WeeklyIncome;
 
 import java.sql.CallableStatement;
@@ -60,7 +61,43 @@ public class DBWriter {
             rowsAffected = ps.executeUpdate();
 
         } catch (SQLException exception) {
-            System.out.println("Error updating weekly income with sql - " + SQLScripts.UPDATE_WEEKLY_INCOME_AMOUNT);
+            System.out.println("Error updating weekly income with sql - " + SQLScripts.UPDATE_WEEKLY_INCOME_ALL);
+        }
+
+        // return the number of rows affected by this update - should be 1
+        return rowsAffected;
+    }
+
+    public static int updateMonthlyIncome(MonthlyIncome income, String source,
+                                          double amount, int dayOfMonth) {
+        if (source == null && amount == -1 && dayOfMonth == -1) {
+            return -1;
+        }
+
+        int rowsAffected = 0;
+        try {
+            PreparedStatement ps = null;
+
+            if (source == null)
+                source = income.getSource();
+
+            if (amount == -1)
+                amount = income.getAmount();
+
+            if (dayOfMonth == -1)
+                dayOfMonth = income.getDayOfMonthReceived();
+
+            // update all
+            ps = JDBCAdapter.getConnection().prepareStatement(SQLScripts.UPDATE_MONTHLY_INCOME_ALL);
+            ps.setString(1, source);
+            ps.setDouble(2, amount);
+            ps.setInt(3, dayOfMonth);
+            ps.setInt(4, income.getId());
+
+            rowsAffected = ps.executeUpdate();
+
+        } catch (SQLException exception) {
+            System.out.println("Error updating monthly income with sql - " + SQLScripts.UPDATE_MONTHLY_INCOME_ALL);
         }
 
         // return the number of rows affected by this update - should be 1
