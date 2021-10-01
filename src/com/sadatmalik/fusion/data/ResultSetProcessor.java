@@ -114,10 +114,11 @@ public class ResultSetProcessor {
         ArrayList<Expense> expenses = new ArrayList<>();
 
         while(rs.next()) {
+            int id = rs.getInt(1);
             String name = rs.getString(2);
             double amount = rs.getDouble(3);
 
-            Expense expense = new MonthlyExpense(name, amount);
+            Expense expense = new MonthlyExpense(id, name, amount);
 
             expenses.add(expense);
         }
@@ -129,12 +130,13 @@ public class ResultSetProcessor {
         ArrayList<Expense> expenses = new ArrayList<>();
 
         while(rs.next()) {
+            int id = rs.getInt(1);
             String name = rs.getString(2);
             double amount = rs.getDouble(3);
             int timesPerWeek = rs.getInt(4);
             int weeklyInterval = rs.getInt(5);
 
-            Expense expense = new WeeklyExpense(name, amount, timesPerWeek, weeklyInterval);
+            Expense expense = new WeeklyExpense(id, name, amount, timesPerWeek, weeklyInterval);
 
             expenses.add(expense);
         }

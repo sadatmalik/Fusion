@@ -138,6 +138,11 @@ public class Controller {
                 break;
 
             case VIEW_EDIT_DETAILED_EXPENSES:
+                do {
+                    Expense itemToEdit = cli.getExpenseItemToEdit(activeUser);
+                    cli.editExpenseItem(itemToEdit);
+                } while (cli.editAnotherItem());
+                break;
 
             case ADD_NEW_EXPENSE_ITEM:
 

@@ -428,6 +428,174 @@ public class CommandLine {
 
     }
 
+    public Expense getExpenseItemToEdit(User user) {
+        Map<Integer, Expense> expenseByMenuNumber = displayItemizedExpense(user);
+        System.out.println("\nPlease select the expense item you would like to edit.");
+
+        int selection = getNextInt();
+        while (!(selection > 0 && selection <= expenseByMenuNumber.size())) {
+            System.out.println("Please select an expense item from the list [1-" + expenseByMenuNumber.size() + "]");
+            selection = getNextInt();
+        }
+        return expenseByMenuNumber.get(selection);
+    }
+
+    // Returns a map of all expense items for user by menu item number
+    private Map<Integer, Expense> displayItemizedExpense(User user) {
+        Map<Integer, Expense> expenseByMenuNumber = new HashMap<>();
+        int menuNumber = 1;
+
+        System.out.println("Monthly expense:");
+        System.out.println("----------------");
+        for (Expense expense : user.getExpenses()) {
+            if (expense instanceof MonthlyExpense) {
+                MonthlyExpense monthlyExpense = (MonthlyExpense) expense;
+                // @todo need to implement day of month paid functionality throughout - defaulting to day 1
+                // @todo tabulate formatting so printed values line up across rows
+                System.out.printf("%d) %s: £%,.2f    paid on month day %d%n", menuNumber,
+                        monthlyExpense.getName(), monthlyExpense.getAmount(), 1);
+                expenseByMenuNumber.put(menuNumber, expense);
+                menuNumber++;
+            }
+        }
+        System.out.println("\nWeekly expense:");
+        System.out.println("----------------");
+        for (Expense expense : user.getExpenses()) {
+            if (expense instanceof WeeklyExpense) {
+                WeeklyExpense weeklyExpense = (WeeklyExpense) expense;
+                System.out.printf("%d) %s: £%,.2f    paid %d times a week every %d week(s)%n", menuNumber,
+                        weeklyExpense.getName(), weeklyExpense.getAmount(), weeklyExpense.getTimesPerWeek(),
+                        weeklyExpense.getWeeklyInterval());
+                expenseByMenuNumber.put(menuNumber, expense);
+                menuNumber++;
+            }
+        }
+        return expenseByMenuNumber;
+    }
+
+    public void editExpenseItem(Expense item) {
+        if (item instanceof WeeklyExpense) {
+            editWeeklyExpenseItem((WeeklyExpense) item);
+        } else if (item instanceof MonthlyExpense) {
+            editMonthlyExpenseItem((MonthlyExpense) item);
+        }
+    }
+
+    private void editWeeklyExpenseItem(WeeklyExpense expense) {
+        String newName = null;
+        double newAmount = -1;
+        int newTimesPerWeek = -1;
+        int newWeeklyInterval = -1;
+
+        // display the selected item
+        System.out.print("Type 'return' to keep current Expense Name '" + expense.getName() + "'" +
+                " or enter new value: ");
+        String input = commandLine.nextLine();
+        if (!"".equals(input)) {
+            newName = input;
+        }
+
+        System.out.print("Type 'return' to keep current Amount '" + expense.getAmount() + "'" +
+                " or enter new value: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                newAmount = Double.parseDouble(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for new amount: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        System.out.print("Type 'return' to keep current Time per Week '" + expense.getTimesPerWeek() + "'" +
+                " or enter new value: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                newTimesPerWeek = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for new times per week: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        System.out.print("Type 'return' to keep current Weekly Interval '" + expense.getWeeklyInterval() + "'" +
+                " or enter new value: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                newWeeklyInterval = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for new weekly interval: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        int rowsAffected = DBWriter.updateWeeklyExpense(expense, newName, newAmount,
+                newTimesPerWeek, newWeeklyInterval);
+
+        if (rowsAffected == 1) {
+            System.out.println("\nItem updated");
+        } else {
+            System.out.println("\nNo item was updated");
+        }
+    }
+
+    private void editMonthlyExpenseItem(MonthlyExpense expense) {
+        // display the selected item with edit options
+        String newName = null;
+        double newAmount = -1;
+        int newDayOfMonth = -1;
+
+        // display the selected item
+        System.out.print("Type 'return' to keep current Expense Name '" + expense.getName() + "'" +
+                " or enter new value: ");
+        String input = commandLine.nextLine();
+        if (!"".equals(input)) {
+            newName = input;
+        }
+
+        System.out.print("Type 'return' to keep current Amount '" + expense.getAmount() + "'" +
+                " or enter new value: ");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                // @todo validate for positive amount
+                newAmount = Double.parseDouble(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for new amount: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        System.out.print("Type 'return' to keep current Day of Month paid '" + "1" +
+                " or enter new value: [Not yet implemented in DB]");
+        input = commandLine.nextLine();
+        while (!"".equals(input)) {
+            try {
+                // @todo check for valid date range
+                newDayOfMonth = Integer.parseInt(input);
+                break;
+            } catch (NumberFormatException nfe) {
+                System.out.print("Please enter a numerical value for Day of Month interval: ");
+                input = commandLine.nextLine();
+            }
+        }
+
+        int rowsAffected = DBWriter.updateMonthlyExpense(expense, newName, newAmount, newDayOfMonth);
+
+        if (rowsAffected == 1) {
+            System.out.println("\nItem updated");
+        } else {
+            System.out.println("\nNo item was updated");
+        }
+
+    }
+
     public void close() {
         commandLine.close();
     }

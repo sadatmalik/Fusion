@@ -5,9 +5,8 @@ public class WeeklyExpense extends Expense {
     protected int timesPerWeek;
     protected int weeklyInterval;
 
-    public WeeklyExpense(String name, double amount, int timesPerWeek, int weeklyInterval) {
-        this.name = name; // is it better to put name and amount in a super() call?
-        this.amount = amount;
+    public WeeklyExpense(int id, String name, double amount, int timesPerWeek, int weeklyInterval) {
+        super(id, name, amount);
         this.timesPerWeek = timesPerWeek;
         this.weeklyInterval = weeklyInterval;
     }
