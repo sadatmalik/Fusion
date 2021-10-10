@@ -145,7 +145,8 @@ public class Controller {
                 break;
 
             case ADD_NEW_EXPENSE_ITEM:
-
+                //cli.addNewExpenseItem(activeUser);
+                break;
 
         }
 
