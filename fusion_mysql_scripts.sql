@@ -141,6 +141,12 @@ UPDATE income
 SET income_source = "LH", income_amount = 65, income_weekly_interval = 3
 WHERE income_id = 1;
 
+UPDATE monthly_income
+SET monthly_income_source = "HSC", monthly_income_amount = 1900, day_of_month_recvd = 6
+WHERE monthly_income_id = 1;
+
+
+# insert income
 INSERT INTO income
 (income_source, income_amount, income_weekly_interval)
 VALUES ("JaJa", 65, 2);
@@ -151,8 +157,15 @@ VALUES(LAST_INSERT_ID(), 1);
 
 CALL CreateIncome("ALP", 50, 2, 1, 1);
 
-UPDATE monthly_income
-SET monthly_income_source = "HSC", monthly_income_amount = 1900, day_of_month_recvd = 6
-WHERE monthly_income_id = 1;
-
 CALL CreateMonthlyIncome("Discover", 5800, 25, 1, 1);
+
+# update expense
+UPDATE weekly_expenses
+SET name = "Grcry", amount = 30, times_per_week = 3, weekly_interval = 2
+WHERE weekly_expense_id = 1;
+
+UPDATE monthly_expenses
+SET name = "Bdbnd", amount = 35.95
+WHERE monthly_expense_id = 1;
+
+
