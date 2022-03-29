@@ -35,17 +35,18 @@ From your IDE you can now run src/FusionMain.
 ## Brief
 
 Fusion Command Line is a  simple command line based utility for managing basic personal
-finances. To begin create a user and set up some income and expense details.
+finances. To begin, create a user and set up some income and expense details.
 
-Its primary purpose was to essentially model the data relationships that would comprise 
-the basis of the full scale Fusion Web application, within the Fusion suite.
+Fusion Command Line's primary purpose was to essentially model the data relationships 
+that would comprise the basis of the full scale Fusion Web application, within the 
+Fusion suite.
 
 While some simple usage instructions follow - for a full-featured application please
-see Fusion Web.
+see [Fusion Web](https://github.com/sadatmalik/fusion-web).
 
 ## Usage
 
-Select what you want to do using the available menu options.
+Select from the available menu options.
 
 ```
 Welcome to Fusion. Please select from users below:
