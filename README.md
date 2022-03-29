@@ -15,34 +15,61 @@ cd Fusion
 ```
 
 Execute the following SQL scripts found in the Fusion directory to create the required DB 
-schema and stored procedure:
+schema, stored procedures, and some sample data for demo purposes:
 
 ```bash
 fusion_db_schema.sql
+fusion_mysql_scripts.sql
 fusion_stored_procedures.sql
 ```
 
-Compile and run Fusion Command Line:
+Open the project in your IDE. Ensure the following MySql connector jar file is present on
+the classpath:
+
+```bash
+mysql-connector-java-8.0.26.jar
+```
+
+From your IDE you can now run src/FusionMain.
+
+## Brief
+
+Fusion Command Line is a  simple command line based utility for managing basic personal
+finances. To begin create a user and set up some income and expense details.
+
+Its primary purpose was to essentially model the data relationships that would comprise 
+the basis of the full scale Fusion Web application, within the Fusion suite.
+
+While some simple usage instructions follow - for a full-featured application please
+see Fusion Web.
 
 ## Usage
 
-```python
-import foobar
+Select what you want to do using the available menu options.
 
-# returns 'words'
-foobar.pluralize('word')
+```
+Welcome to Fusion. Please select from users below:
 
-# returns 'geese'
-foobar.pluralize('goose')
+1. Create new user
+```
 
-# returns 'phenomenon'
-foobar.singularize('phenomena')
+Fusion main menu:
+
+```
+Fusion Main Menu. What would you like to do?
+
+1) View Quick Stats
+2) Add/Edit Income & Expenses
+3) Run Reports
+4) Create/View Custom Goals
+5) Exit
 ```
 
 ## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+Pull requests are welcome. For major changes, please open an issue first to discuss what 
+you would like to change.
 
 Please make sure to update tests as appropriate.
 
 ## License
-[MIT](https://choosealicense.com/licenses/mit/)
+[MIT](license.txt)

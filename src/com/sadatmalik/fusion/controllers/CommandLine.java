@@ -43,8 +43,8 @@ public class CommandLine {
             // select user from users
             activeUser = users.get(selection-1);
         } else if (selection > 0 && selection == users.size()+1) {
-            // @todo create a new user
-
+            // create a new user
+            activeUser = createNewUser();
         } else {
             // invalid selection, try again
             System.out.println("\nPlease select user from options [1 - " + (users.size()+1) + "]");
@@ -52,6 +52,11 @@ public class CommandLine {
         }
 
         return activeUser;
+    }
+
+    private User createNewUser() {
+        // @todo
+        return null;
     }
 
     public void showMainMenu() {
