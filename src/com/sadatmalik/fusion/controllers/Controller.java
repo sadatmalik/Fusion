@@ -22,7 +22,7 @@ public class Controller {
         System.out.println("Controller(): Initialised command line");
     }
 
-    public static void main(String[] args) {
+    public static void run() {
         Controller fusion = new Controller();
 
         System.out.println("\nWelcome to Fusion. Please select from users below:");
